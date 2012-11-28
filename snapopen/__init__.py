@@ -169,7 +169,7 @@ class SnapOpenPluginInstance:
         dirfilter = " ! -path '*.svn*' ! -path '*.git*' "
         binfilter = " ! -iname '*.o' ! -iname '*.so' ! -iname '*.lo' ! -iname '*.Plo' ! -iname '*.a' ! -iname '*.pyc' "
         otherfilter = " ! -iname '*~' "
-        os.popen("cd %s; find . -type f %s > %s 2> /dev/null &" % (self._rootdir.replace("file://", ""), imagefilter + dirfilter + binfilter + otherfilter, self._tmpfile))
+        os.popen("cd '%s'; find . -type f %s > %s 2> /dev/null &" % (self._rootdir.replace("file://", ""), imagefilter + dirfilter + binfilter + otherfilter, self._tmpfile))
 
         self._snapopen_window.show()
         self._glade_entry_name.select_region(0,-1)
