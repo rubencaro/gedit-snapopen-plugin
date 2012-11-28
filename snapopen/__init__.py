@@ -157,6 +157,12 @@ class SnapOpenPluginInstance:
         else:
             self._snapopen_window.set_title(app_string + " (Working dir): " + self._rootdir)
 
+        # use git repo base dir if we are inside a git repo
+        gitdir = os.popen("cd '%s'; git rev-parse --show-toplevel 2> /dev/null" % self._rootdir.replace("file://", "")).readlines()
+        if len(gitdir) > 0:
+            self._snapopen_window.set_title(app_string + " (Git root)")
+            self._rootdir = gitdir[0].replace("\n","")
+
         # cache the file list in the background
         #modify lines below as needed, these defaults work pretty well
         imagefilter = " ! -iname '*.jpg' ! -iname '*.jpeg' ! -iname '*.gif' ! -iname '*.png' ! -iname '*.psd' ! -iname '*.tif' "
