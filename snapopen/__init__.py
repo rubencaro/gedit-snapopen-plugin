@@ -161,7 +161,7 @@ class SnapOpenPluginInstance:
         gitdir = os.popen("cd '%s'; git rev-parse --show-toplevel 2> /dev/null" % self._rootdir.replace("file://", "")).readlines()
         if len(gitdir) > 0:
             self._snapopen_window.set_title(app_string + " (Git root)")
-            self._rootdir = gitdir[0].replace("\n","")
+            self._rootdir = "file://" + gitdir[0].replace("\n","")
 
         # cache the file list in the background
         #modify lines below as needed, these defaults work pretty well
