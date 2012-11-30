@@ -149,12 +149,12 @@ class SnapOpenPluginInstance:
         """ Get git base dir if given path is inside a git repo. None otherwise. """
         gitdir = os.popen("cd '%s'; git rev-parse --show-toplevel 2> /dev/null" % path).readlines()
         if len(gitdir) > 0:
-		return gitdir[0].replace("\n","")
+            return gitdir[0].replace("\n","")
         return None
 
     def map_to_git_base_dirs( self ):
-	""" Replace paths with respective git repo base dirs if it exists """
-	# use git repo base dir is more suitable if we are inside a git repo, for any dir we have guessed before
+        """ Replace paths with respective git repo base dirs if it exists """
+        # use git repo base dir is more suitable if we are inside a git repo, for any dir we have guessed before
         dirs = []
         for d in self._dirs:
             gitdir = self.get_git_base_dir(d)
@@ -163,63 +163,63 @@ class SnapOpenPluginInstance:
             else:
                 dirs.append(gitdir)
         self._dirs = dirs
-	# we could have introduced duplicates here
+        # we could have introduced duplicates here
         self.ensure_unique_entries()
 
     def ensure_unique_entries( self ):
-	""" Remove duplicates from dirs list """
+        """ Remove duplicates from dirs list """
         # this also looks for paths already included in other paths
-	unique = []
+        unique = []
         for d in self._dirs:
-	    d = d.replace("file://","").replace("//","/")
-	    should_append = True
-	    for i,u in enumerate(unique): # replace everyone with its wider parent
-		if u in d: # already this one, or a parent
-		    should_append = False
-		elif d in u: # replace with the parent
-		    unique[i] = d
-		    should_append = False
-	    
-	    if should_append:
-		unique.append(d)
-			
+            d = d.replace("file://","").replace("//","/")
+            should_append = True
+            for i,u in enumerate(unique): # replace everyone with its wider parent
+                if u in d: # already this one, or a parent
+                    should_append = False
+                elif d in u: # replace with the parent
+                    unique[i] = d
+                    should_append = False
+
+            if should_append:
+                unique.append(d)
+
         self._dirs = set(unique)
 
     def get_dirs_string( self ):
-	""" Gets the quoted string built with dir list, ready to be passed on to 'find' """
-	string = ''
-	for d in self._dirs:
-	    string += "'%s' " % d
-	return string
+        """ Gets the quoted string built with dir list, ready to be passed on to 'find' """
+        string = ''
+        for d in self._dirs:
+            string += "'%s' " % d
+        return string
 
     #on menuitem activation (incl. shortcut)
     def on_snapopen_action( self ):
         self._init_ui()
 
-	# build paths list
-	self._dirs = []
+        # build paths list
+        self._dirs = []
 
-	# append current local open files dirs
-	for doc in self._window.get_documents():
+        # append current local open files dirs
+        for doc in self._window.get_documents():
             location = doc.get_location()
             if location and doc.is_local():
                 self._dirs.append( location.get_parent().get_uri() )
 
-	# append filebrowser root if available
+        # append filebrowser root if available
         fbroot = self.get_filebrowser_root()
         if fbroot != "" and fbroot is not None:
-            self._dirs.append(fbroot)	
+            self._dirs.append(fbroot)
 
-	# ensure_unique_entries is executed after mapping to git base dir
-	# but it's cheaper, then do it before too, avoiding extra work
+        # ensure_unique_entries is executed after mapping to git base dir
+        # but it's cheaper, then do it before too, avoiding extra work
         self.ensure_unique_entries()
 
-	# replace each path with its git base dir if exists
-	self.map_to_git_base_dirs()
+        # replace each path with its git base dir if exists
+        self.map_to_git_base_dirs()
 
         # append gedit dir (usually too wide for a quick search) if we have nothing so far
-	if len(self._dirs) == 0:
-            self._dirs = [ os.getcwd() ]	
+        if len(self._dirs) == 0:
+            self._dirs = [ os.getcwd() ]
 
         # build filters list
         #modify lines below as needed, these defaults work pretty well
@@ -228,7 +228,7 @@ class SnapOpenPluginInstance:
         filters += " ! -iname '*.o' ! -iname '*.so' ! -iname '*.lo' ! -iname '*.Plo' ! -iname '*.a' ! -iname '*.pyc' "
         filters += " ! -iname '*~' "
 
-	# cache the file list in the background
+        # cache the file list in the background
         os.popen("find %s -type f %s > %s 2> /dev/null &" % (self.get_dirs_string(), filters, self._tmpfile))
 
         self._snapopen_window.show()
