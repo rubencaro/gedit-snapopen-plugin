@@ -22,7 +22,7 @@ class SnapOpenPluginInstance:
     def __init__( self, plugin, window ):
         self._window = window
         self._plugin = plugin
-        self._dirs = []
+        self._dirs = [] # to be filled
         self._tmpfile = os.path.join(tempfile.gettempdir(), 'snapopen.%s.%s' % (os.getuid(),os.getpid()))
         self._show_hidden = False
         self._liststore = None;
