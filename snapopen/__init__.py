@@ -226,7 +226,7 @@ class SnapOpenPluginInstance:
         filters = " ! -iname '*.jpg' ! -iname '*.jpeg' ! -iname '*.gif' ! -iname '*.png' ! -iname '*.psd' ! -iname '*.tif' "
         filters += " ! -path '*.svn*' ! -path '*.git*' "
         filters += " ! -iname '*.o' ! -iname '*.so' ! -iname '*.lo' ! -iname '*.Plo' ! -iname '*.a' ! -iname '*.pyc' "
-        filters += " ! -iname '*~' "
+        filters += " ! -iname '*~' ! -iname '*.swp' "
 
         # cache the file list in the background
         os.popen("find %s -type f %s > %s 2> /dev/null &" % (self.get_dirs_string(), filters, self._tmpfile))
