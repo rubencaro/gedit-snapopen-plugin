@@ -147,7 +147,10 @@ class SnapOpenPluginInstance:
 
     def get_git_base_dir( self, path ):
         """ Get git base dir if given path is inside a git repo. None otherwise. """
-        gitdir = os.popen("cd '%s'; git rev-parse --show-toplevel 2> /dev/null" % path).readlines()
+        try:
+            gitdir = os.popen("cd '%s'; git rev-parse --show-toplevel 2> /dev/null" % path).readlines()
+        except:
+            gitdir = ''
         if len(gitdir) > 0:
             return gitdir[0].replace("\n","")
         return None
