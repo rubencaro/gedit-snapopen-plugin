@@ -125,6 +125,7 @@ class SnapOpenPluginInstance:
 
         self._liststore.clear()
         maxcount = 0
+        print cmd
         hits = os.popen(cmd).readlines()
         for file in hits:
             file = file.rstrip().replace("./", "") #remove cwd prefix
@@ -148,7 +149,9 @@ class SnapOpenPluginInstance:
     def get_git_base_dir( self, path ):
         """ Get git base dir if given path is inside a git repo. None otherwise. """
         try:
-            gitdir = os.popen("cd '%s'; git rev-parse --show-toplevel 2> /dev/null" % path).readlines()
+            cmd = "cd '%s' 2> /dev/null; git rev-parse --show-toplevel 2> /dev/null" % path
+            print cmd
+            gitdir = os.popen(cmd).readlines()
         except:
             gitdir = ''
         if len(gitdir) > 0:
@@ -232,7 +235,9 @@ class SnapOpenPluginInstance:
         filters += " ! -iname '*~' ! -iname '*.swp' "
 
         # cache the file list in the background
-        os.popen("find %s -type f %s > %s 2> /dev/null &" % (self.get_dirs_string(), filters, self._tmpfile))
+        cmd = "find %s -type f %s > %s 2> /dev/null &" % (self.get_dirs_string(), filters, self._tmpfile)
+        print cmd
+        os.popen(cmd)
 
         self._snapopen_window.show()
         self._glade_entry_name.select_region(0,-1)
