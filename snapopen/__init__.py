@@ -273,7 +273,7 @@ class SnapOpenPluginInstance:
     #opens (or switches to) the given file
     def _open_file( self, filename ):
         #uri      = self._rootdir + "/" + pathname2url(filename)
-        uri      = "file:///" + pathname2url(filename)
+        uri      = "file://" + pathname2url(filename)
         gio_file = Gio.file_new_for_uri(uri)
         tab = self._window.get_tab_from_location(gio_file)
         if tab == None:
